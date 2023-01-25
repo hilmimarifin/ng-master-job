@@ -1,5 +1,5 @@
 <div style="margin: auto; width: 70%;">    
-    <h2>Example Datagrid</h2>
+    <h2>Job Position</h2>
     <dx-button style="float: right; margin-bottom: 10px;" icon="add"
         (onClick)="addRow()">
 
@@ -14,10 +14,15 @@
     [dataSource]="sampleDatasource" [showBorders]="true">
     <dxi-column caption="Code" dataField="code" alignment="center" cssClass="middle-content" width="100"></dxi-column>
     <dxi-column caption="Name" dataField="name" alignment="center" cssClass="middle-content"></dxi-column>
+    <dxi-column caption="Job Title" dataField="titleId" alignment="center" cssClass="middle-content">
+        <dxo-lookup [dataSource]="jobTitle" displayExpr="name" valueExpr="id">
+        </dxo-lookup>
+    </dxi-column>
+
     <dxi-column caption="Action" cellTemplate="actionBtn" alignment="center" width="100">
         <div *dxTemplate="let t of 'actionBtn'" style="display: flex; gap: 10px;">
             <dx-button hint="Save" [visible]='t.row.isEditing' icon="save"
-                [disabled]="false" (onClick)="save()">
+                [disabled]="false" (onClick)="save(t)">
             </dx-button>
             <dx-button hint="Cancel" [visible]='t.row.isEditing' icon="undo"
                 [disabled]="false"(onClick)="cancel()">

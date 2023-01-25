@@ -48,8 +48,6 @@ export class JobTitleComponent implements OnInit {
   @ViewChild('gridContainer') gridContainer!: DxDataGridComponent;
 
   save(e: any) {
-    console.log('data', e);
-    // this.update(e.id, e.name, e.code)
     if (!e.data.id) {
       this.create(e.row.data.name, e.row.data.code)
     } else {
