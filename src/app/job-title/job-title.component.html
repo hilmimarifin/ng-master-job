@@ -17,7 +17,7 @@
     <dxi-column caption="Action" cellTemplate="actionBtn" alignment="center" width="100">
         <div *dxTemplate="let t of 'actionBtn'" style="display: flex; gap: 10px;">
             <dx-button hint="Save" [visible]='t.row.isEditing' icon="save"
-                [disabled]="false" (onClick)="save()">
+                [disabled]="false" (onClick)="save(t)">
             </dx-button>
             <dx-button hint="Cancel" [visible]='t.row.isEditing' icon="undo"
                 [disabled]="false"(onClick)="cancel()">

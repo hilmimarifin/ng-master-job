@@ -8,6 +8,7 @@ import { JobTitleComponent } from './job-title/job-title.component';
 import { JobPositionComponent } from './job-position/job-position.component';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { HttpClientModule } from '@angular/common/http';
 
 const appRoutes: Routes = [
   {
@@ -45,7 +46,8 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
     BrowserModule,
     DxDataGridModule,
-    DxButtonModule
+    DxButtonModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

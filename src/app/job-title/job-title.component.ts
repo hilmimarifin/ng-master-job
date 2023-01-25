@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular';
+import JobTitleService from '../service/job-title-service';
+import { IJobTitle } from '../types/job-title';
 
 @Component({
   selector: 'app-job-title',
@@ -8,60 +10,70 @@ import { DxDataGridComponent } from 'devextreme-angular';
 })
 export class JobTitleComponent implements OnInit {
 
-  constructor() { }
+  constructor(private jobtTitleService: JobTitleService) { }
 
   ngOnInit(): void {
+    this.getList()
   }
 
-  sampleDatasource = [
-    {
-      id: 1,
-      code: 25,
-      name: 'Test 1',      
-    },
-    {
-      id: 2,
-      code: 26,
-      name: 'Test 2',      
-    },
-    {
-      id: 3,
-      code: 27,
-      name: 'Test 3',      
-    },
-    {
-      id: 4,
-      code: 28,
-      name: 'Test 4',      
-    },
-    {
-      id: 1,
-      code: 23,
-      name: 'Test 5',      
-    }
-  ];
+  getList(): void {
+    this.jobtTitleService.getList()
+      .subscribe((listJob: any) => this.sampleDatasource = listJob.data)
+  }
+
+  create(name: string, code: string): void {
+    name = name.trim();
+    code = code.trim();
+    if (!name || !code) { return; }
+    this.jobtTitleService.create({ name, code } as IJobTitle)
+      .subscribe((newJobTitle) => {
+        this.sampleDatasource.push(newJobTitle);
+      });
+  }
+
+  update(id: number, name: string, code: string): void {
+    name = name.trim();
+    code = code.trim();
+    if (!name || !code) { return; }
+    this.jobtTitleService.update({ id, name, code } as IJobTitle)
+      .subscribe();
+  }
+
+
+  deleteTitle(id: number): void {
+    this.jobtTitleService.delete(id).subscribe();
+  }
+  sampleDatasource: IJobTitle[] = [];
 
   @ViewChild('gridContainer') gridContainer!: DxDataGridComponent;
 
-  save(){
+  save(e: any) {
+    console.log('data', e);
+    // this.update(e.id, e.name, e.code)
+    if (!e.data.id) {
+      this.create(e.row.data.name, e.row.data.code)
+    } else {
+      this.update(e.row.data.id, e.row.data.name, e.row.data.code)
+    }
     this.gridContainer.instance.saveEditData();
   }
 
-  cancel(){
+  cancel() {
     this.gridContainer.instance.cancelEditData();
   }
 
-  edit(e: any){
+  edit(e: any) {
     const indexRow = this.gridContainer.instance.getRowIndexByKey(e.id);
     this.gridContainer.instance.editRow(indexRow);
   }
 
-  delete(e: any){
+  delete(e: any) {
     const indexRow = this.gridContainer.instance.getRowIndexByKey(e.id);
+    this.deleteTitle(e.id)
     this.gridContainer.instance.deleteRow(indexRow);
   }
 
-  addRow(){
+  addRow() {
     this.gridContainer.instance.addRow();
   }
 
