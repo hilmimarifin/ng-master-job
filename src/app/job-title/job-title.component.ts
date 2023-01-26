@@ -18,7 +18,7 @@ export class JobTitleComponent implements OnInit {
 
   getList(): void {
     this.jobtTitleService.getList()
-      .subscribe((listJob: any) => this.sampleDatasource = listJob.data)
+      .subscribe((listJob: any) => this.dataSource = listJob)
   }
 
   create(name: string, code: string): void {
@@ -27,7 +27,7 @@ export class JobTitleComponent implements OnInit {
     if (!name || !code) { return; }
     this.jobtTitleService.create({ name, code } as IJobTitle)
       .subscribe((newJobTitle) => {
-        this.sampleDatasource.push(newJobTitle);
+        this.dataSource.push(newJobTitle);
       });
   }
 
@@ -43,7 +43,7 @@ export class JobTitleComponent implements OnInit {
   deleteTitle(id: number): void {
     this.jobtTitleService.delete(id).subscribe();
   }
-  sampleDatasource: IJobTitle[] = [];
+  dataSource: IJobTitle[] = [];
 
   @ViewChild('gridContainer') gridContainer!: DxDataGridComponent;
 

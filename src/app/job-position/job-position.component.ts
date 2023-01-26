@@ -20,35 +20,35 @@ export class JobPositionComponent implements OnInit {
 
   getList(): void {
     this.jobPositionService.getList()
-      .subscribe((listJob: any) => this.sampleDatasource = listJob.data)
+      .subscribe((listJob: any) => this.dataSource = listJob)
   }
 
   getTitles(): void {
     this.jobTitleService.getList()
-      .subscribe((listTitle: any) => this.jobTitle = listTitle.data)
+      .subscribe((listTitle: any) => this.jobTitle = listTitle)
   }
 
   create(name: string, code: string, titleId: number): void {
     name = name.trim();
     code = code.trim();
-    if (!name || !code) { return; }
+    if (!name || !code || !titleId) { return; }
     this.jobPositionService.create({ name, code, titleId } as IJobPosition)
       .subscribe((newJobTitle) => {
-        this.sampleDatasource.push(newJobTitle);
+        this.dataSource.push(newJobTitle);
       });
   }
 
   update(id: number, name: string, code: string, titleId: number): void {
     name = name.trim();
     code = code.trim();
-    if (!name || !code) { return; }
+    if (!name || !code ||!titleId) { return; }
     this.jobPositionService.update({ id, name, code, titleId } as IJobPosition)
       .subscribe();
   }
 
 
 
-  sampleDatasource: IJobPosition[] = [];
+  dataSource: IJobPosition[] = [];
   jobTitle = []
 
   @ViewChild('gridContainer') gridContainer!: DxDataGridComponent;

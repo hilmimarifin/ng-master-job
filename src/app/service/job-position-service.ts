@@ -18,9 +18,10 @@ export default class JobPositionService {
     };
 
     baseUrl= 'http://localhost:9000'
+    ASPbaseUrl= 'http://localhost:5045'
 
     getList(): Observable<IJobPosition[]> {
-        return this.http.get<IJobPosition[]>(`${this.baseUrl}/job-position`)
+        return this.http.get<IJobPosition[]>(`${this.ASPbaseUrl}/job-position`)
             .pipe(
                 catchError(this.handleError<IJobPosition[]>('getList', []))
             )
