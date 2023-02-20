@@ -38,23 +38,21 @@ export class EmployeeComponent implements OnInit {
       .subscribe((listPosition: any) => this.jobPosition = listPosition)
   }
 
-  create(name: string, nik: string, jobPositionId: string, jobTitleId: string, address: string): void {
-    console.log('adressss', name);
+  create(name: string, nik: string, address: string,  jobTitleId: string, jobPositionId: string): void {
     
     name = name.trim();
     nik = nik.trim();
     address = address.trim();
 
     if (!name || !nik || !jobPositionId || !jobTitleId) { return; }
-    console.log('is here');
     
-    this.employeeService.create({ name, nik, jobPositionId, jobTitleId, address } as IEmployee)
+    this.employeeService.create({ name, nik, address, jobPositionId, jobTitleId} as IEmployee)
       .subscribe((newEmployee) => {
         this.dataSource.push(newEmployee);
       });
   }
 
-  update(id: string, name: string, nik: string, jobTitleId: string, address: string, jobPositionId: string): void {
+  update(id: string, name: string, nik: string, address: string, jobTitleId: string,  jobPositionId: string): void {
     name = name.trim();
     nik = nik.trim();
     address = address.trim();
