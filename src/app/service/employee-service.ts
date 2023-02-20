@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, catchError, of } from "rxjs";
+import { IEmployee } from "../types/employee";
 import { IJobPosition } from "../types/job-title";
 
 
@@ -8,7 +9,7 @@ import { IJobPosition } from "../types/job-title";
     providedIn: 'root'
 })
 
-export default class JobPositionService {
+export default class EmployeeService {
     constructor(private http: HttpClient) { }
 
     httpOptions = {
@@ -20,21 +21,21 @@ export default class JobPositionService {
     baseUrl= 'http://localhost:9000'
     ASPbaseUrl= 'http://localhost:5296'
 
-    getList(): Observable<IJobPosition[]> {
-        return this.http.get<IJobPosition[]>(`${this.ASPbaseUrl}/job-position`)
+    getList(): Observable<IEmployee[]> {
+        return this.http.get<IEmployee[]>(`${this.ASPbaseUrl}/employee`)
             .pipe(
-                catchError(this.handleError<IJobPosition[]>('getList', []))
+                catchError(this.handleError<IEmployee[]>('getList', []))
             )
     }
 
-    create(jobTitle: IJobPosition): Observable<IJobPosition> {
-        return this.http.post<IJobPosition>(`${this.ASPbaseUrl}/job-position/create`, jobTitle, this.httpOptions).pipe(
-            catchError(this.handleError<IJobPosition>('create'))
+    create(employee: IEmployee): Observable<IEmployee> {
+        return this.http.post<IEmployee>(`${this.ASPbaseUrl}/employee/create`, employee, this.httpOptions).pipe(
+            catchError(this.handleError<IEmployee>('create'))
         );
     }
 
-    update(jobTitle: IJobPosition): Observable<IJobPosition> {
-        return this.http.patch<IJobPosition>(`${this.ASPbaseUrl}/job-position/update`, jobTitle, this.httpOptions).pipe(
+    update(employee: IEmployee): Observable<IEmployee> {
+        return this.http.patch<IEmployee>(`${this.ASPbaseUrl}/employee/update`, employee, this.httpOptions).pipe(
           catchError(this.handleError<any>('update'))
         );
       }

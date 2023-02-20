@@ -18,7 +18,7 @@ export default class JobTitleService {
     };
 
     baseUrl= 'http://localhost:9000'
-    ASPbaseUrl = 'http://localhost:5045'
+    ASPbaseUrl = 'http://localhost:5296'
 
     getList(): Observable<IJobTitle[]> {
         return this.http.get<IJobTitle[]>(`${this.ASPbaseUrl}/job-title`)
@@ -28,21 +28,21 @@ export default class JobTitleService {
     }
 
     create(jobTitle: IJobTitle): Observable<IJobTitle> {
-        return this.http.post<IJobTitle>(`${this.baseUrl}/job-title`, jobTitle, this.httpOptions).pipe(
+        return this.http.post<IJobTitle>(`${this.ASPbaseUrl}/job-title/create`, jobTitle, this.httpOptions).pipe(
             catchError(this.handleError<IJobTitle>('create'))
         );
     }
 
     update(jobTitle: IJobTitle): Observable<IJobTitle> {
-        return this.http.patch<IJobTitle>(`${this.baseUrl}/job-title/update`, jobTitle, this.httpOptions).pipe(
+        return this.http.patch<IJobTitle>(`${this.ASPbaseUrl}/job-title/update`, jobTitle, this.httpOptions).pipe(
           catchError(this.handleError<any>('update'))
         );
       }
     
 
-    delete(id: number): Observable<IJobTitle> {
-        return this.http.delete<IJobTitle>(`${this.baseUrl}/job-title/delete`, {...this.httpOptions, body: {id: id}}).pipe(
-          catchError(this.handleError<IJobTitle>('deleteHero'))
+    delete(id: string): Observable<IJobTitle> {
+        return this.http.delete<IJobTitle>(`${this.ASPbaseUrl}/job-title/delete`, {...this.httpOptions, body: {id: id}}).pipe(
+          catchError(this.handleError<IJobTitle>('delete'))
         );
       }
 

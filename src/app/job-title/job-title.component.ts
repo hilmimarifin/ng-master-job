@@ -40,7 +40,7 @@ export class JobTitleComponent implements OnInit {
   }
 
 
-  deleteTitle(id: number): void {
+  deleteTitle(id: string): void {
     this.jobtTitleService.delete(id).subscribe();
   }
   dataSource: IJobTitle[] = [];

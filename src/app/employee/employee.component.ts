@@ -1,5 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular';
+import EmployeeService from '../service/employee-service';
+import JobPositionService from '../service/job-position-service';
+import JobTitleService from '../service/job-title-service';
+import { IEmployee } from '../types/employee';
 
 @Component({
   selector: 'app-employee',
@@ -8,42 +12,66 @@ import { DxDataGridComponent } from 'devextreme-angular';
 })
 export class EmployeeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private employeeService: EmployeeService, private jobPositionService: JobPositionService, private jobTitleService: JobTitleService) { }
 
   ngOnInit(): void {
+    this.getList()
+    this.getPositions()
+    this.getTitles()
+  }
+  dataSource : IEmployee[] = [];
+  jobTitle = [];
+  jobPosition = [];
+
+  getList(): void {
+    this.employeeService.getList()
+      .subscribe((listEmployee: any) => this.dataSource = listEmployee)
   }
 
-  sampleDatasource = [
-    {
-      id: 1,
-      code: 25,
-      name: 'Test 1',      
-    },
-    {
-      id: 2,
-      code: 26,
-      name: 'Test 2',      
-    },
-    {
-      id: 3,
-      code: 27,
-      name: 'Test 3',      
-    },
-    {
-      id: 4,
-      code: 28,
-      name: 'Test 4',      
-    },
-    {
-      id: 1,
-      code: 23,
-      name: 'Test 5',      
-    }
-  ];
+  getTitles(): void {
+    this.jobTitleService.getList()
+      .subscribe((listTitle: any) => this.jobTitle = listTitle)
+  }
+
+  getPositions(): void {
+    this.jobPositionService.getList()
+      .subscribe((listPosition: any) => this.jobPosition = listPosition)
+  }
+
+  create(name: string, nik: string, jobPositionId: string, jobTitleId: string, address: string): void {
+    console.log('adressss', name);
+    
+    name = name.trim();
+    nik = nik.trim();
+    address = address.trim();
+
+    if (!name || !nik || !jobPositionId || !jobTitleId) { return; }
+    console.log('is here');
+    
+    this.employeeService.create({ name, nik, jobPositionId, jobTitleId, address } as IEmployee)
+      .subscribe((newEmployee) => {
+        this.dataSource.push(newEmployee);
+      });
+  }
+
+  update(id: string, name: string, nik: string, jobTitleId: string, address: string, jobPositionId: string): void {
+    name = name.trim();
+    nik = nik.trim();
+    address = address.trim();
+
+    if (!name || !nik || !jobPositionId || !jobTitleId) { return; }
+    this.employeeService.update({ id, name, nik, jobPositionId, jobTitleId, address } as IEmployee)
+      .subscribe();
+  }
 
   @ViewChild('gridContainer') gridContainer!: DxDataGridComponent;
 
-  save(){
+  save(e: any){
+    if (!e.data.id) {
+      this.create(e.row.data.name, e.row.data.nik,e.row.data.jobPositionId, e.row.data.jobTitleId, e.row.data.address)
+    } else {
+      this.update(e.row.data.id, e.row.data.name, e.row.data.nik, e.row.data.address, e.row.data.jobTitleId, e.row.data.jobPositionId)
+    }
     this.gridContainer.instance.saveEditData();
   }
 

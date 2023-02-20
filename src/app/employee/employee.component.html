@@ -1,5 +1,5 @@
 <div style="margin: auto; width: 70%;">    
-    <h2>Example Datagrid</h2>
+    <h2>Employee</h2>
     <dx-button style="float: right; margin-bottom: 10px;" icon="add"
         (onClick)="addRow()">
 
@@ -11,16 +11,22 @@
     width="auto"
     keyExpr="id"
     edito
-    [dataSource]="sampleDatasource" [showBorders]="true">
+    [dataSource]="dataSource" [showBorders]="true">
     <dxi-column caption="Nama" dataField="name" alignment="center" cssClass="middle-content" width="100"></dxi-column>
-    <dxi-column caption="Employee NIK" dataField="name" alignment="center" cssClass="middle-content"></dxi-column>
+    <dxi-column caption="Employee NIK" dataField="nik" alignment="center" cssClass="middle-content"></dxi-column>
     <dxi-column caption="Alamat" dataField="address" alignment="center" cssClass="middle-content"></dxi-column>
-    <dxi-column caption="Job Position" dataField="jobPoisition" alignment="center" cssClass="middle-content"></dxi-column>
-    <dxi-column caption="Job Title" dataField="jobTitle" alignment="center" cssClass="middle-content"></dxi-column>
+    <dxi-column caption="Job Position" dataField="jobPositionId" alignment="center" cssClass="middle-content">
+        <dxo-lookup [dataSource]="jobPosition" displayExpr="name" valueExpr="id">
+        </dxo-lookup>
+    </dxi-column>
+    <dxi-column caption="Job Title" dataField="jobTitleId" alignment="center" cssClass="middle-content">
+        <dxo-lookup [dataSource]="jobTitle" displayExpr="name" valueExpr="id">
+        </dxo-lookup>
+    </dxi-column>
     <dxi-column caption="Action" cellTemplate="actionBtn" alignment="center" width="100">
         <div *dxTemplate="let t of 'actionBtn'" style="display: flex; gap: 10px;">
             <dx-button hint="Save" [visible]='t.row.isEditing' icon="save"
-                [disabled]="false" (onClick)="save()">
+                [disabled]="false" (onClick)="save(t)">
             </dx-button>
             <dx-button hint="Cancel" [visible]='t.row.isEditing' icon="undo"
                 [disabled]="false"(onClick)="cancel()">
