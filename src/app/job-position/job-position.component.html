@@ -11,7 +11,11 @@
     width="auto"
     keyExpr="id"
     edito
-    [dataSource]="dataSource" [showBorders]="true">
+    [dataSource]="dataSource"
+    [showBorders]="true"
+    (onRowRemoved)="deletePosition('i')"
+    >
+    
     <dxi-column caption="Code" dataField="code" alignment="center" cssClass="middle-content" width="100"></dxi-column>
     <dxi-column caption="Name" dataField="name" alignment="center" cssClass="middle-content"></dxi-column>
     <dxi-column caption="Job Title" dataField="titleId" alignment="center" cssClass="middle-content">

@@ -17,7 +17,7 @@ export class EmployeeComponent implements OnInit {
   ngOnInit(): void {
     this.getList()
     this.getPositions()
-    this.getTitles()
+    // this.getTitles()
   }
   dataSource : IEmployee[] = [];
   jobTitle = [];
@@ -28,10 +28,10 @@ export class EmployeeComponent implements OnInit {
       .subscribe((listEmployee: any) => this.dataSource = listEmployee)
   }
 
-  getTitles(): void {
-    this.jobTitleService.getList()
-      .subscribe((listTitle: any) => this.jobTitle = listTitle)
-  }
+  // getTitles(): void {
+  //   this.jobTitleService.getList()
+  //     .subscribe((listTitle: any) => this.jobTitle = listTitle)
+  // }
 
   getPositions(): void {
     this.jobPositionService.getList()
@@ -44,7 +44,7 @@ export class EmployeeComponent implements OnInit {
     nik = nik.trim();
     address = address.trim();
 
-    if (!name || !nik || !jobPositionId || !jobTitleId) { return; }
+    if (!name || !nik || !jobPositionId) { return; }
     
     this.employeeService.create({ name, nik, address, jobPositionId, jobTitleId} as IEmployee)
       .subscribe((newEmployee) => {
@@ -62,11 +62,16 @@ export class EmployeeComponent implements OnInit {
       .subscribe();
   }
 
+  deleteEmployee(id: string): void {
+    this.employeeService.delete(id).subscribe();
+  }
+
+
   @ViewChild('gridContainer') gridContainer!: DxDataGridComponent;
 
   save(e: any){
     if (!e.data.id) {
-      this.create(e.row.data.name, e.row.data.nik,e.row.data.jobPositionId, e.row.data.jobTitleId, e.row.data.address)
+      this.create(e.row.data.name, e.row.data.nik, e.row.data.address, e.row.data.jobTitleId, e.row.data.jobPositionId)
     } else {
       this.update(e.row.data.id, e.row.data.name, e.row.data.nik, e.row.data.address, e.row.data.jobTitleId, e.row.data.jobPositionId)
     }
@@ -84,6 +89,7 @@ export class EmployeeComponent implements OnInit {
 
   delete(e: any){
     const indexRow = this.gridContainer.instance.getRowIndexByKey(e.id);
+    this.deleteEmployee(e.id)
     this.gridContainer.instance.deleteRow(indexRow);
   }
 

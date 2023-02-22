@@ -46,6 +46,12 @@ export class JobPositionComponent implements OnInit {
       .subscribe();
   }
 
+  deletePosition(id: string): void {
+    // this.jobPositionService.delete(id).subscribe();
+    console.log("treiggered", id);
+    
+  }
+
 
 
   dataSource: IJobPosition[] = [];
@@ -73,6 +79,7 @@ export class JobPositionComponent implements OnInit {
 
   delete(e: any){
     const indexRow = this.gridContainer.instance.getRowIndexByKey(e.id);
+    // this.deletePosition(e.id)
     this.gridContainer.instance.deleteRow(indexRow);
   }
 

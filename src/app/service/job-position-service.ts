@@ -40,7 +40,7 @@ export default class JobPositionService {
       }
     
 
-    delete(id: number): Observable<IJobPosition> {
+    delete(id: string): Observable<IJobPosition> {
         return this.http.delete<IJobPosition>(`${this.ASPbaseUrl}/job-position/delete`, {...this.httpOptions, body: {id: id}}).pipe(
           catchError(this.handleError<IJobPosition>('delete'))
         );

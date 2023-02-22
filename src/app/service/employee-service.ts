@@ -41,9 +41,9 @@ export default class EmployeeService {
       }
     
 
-    delete(id: number): Observable<IJobPosition> {
-        return this.http.delete<IJobPosition>(`${this.ASPbaseUrl}/job-position/delete`, {...this.httpOptions, body: {id: id}}).pipe(
-          catchError(this.handleError<IJobPosition>('delete'))
+    delete(id: string): Observable<IEmployee> {
+        return this.http.delete<IEmployee>(`${this.ASPbaseUrl}/employee/delete`, {...this.httpOptions, body: {id: id}}).pipe(
+          catchError(this.handleError<IEmployee>('delete'))
         );
       }
 

@@ -19,9 +19,9 @@
         <dxo-lookup [dataSource]="jobPosition" displayExpr="name" valueExpr="id">
         </dxo-lookup>
     </dxi-column>
-    <dxi-column caption="Job Title" dataField="jobTitleId" alignment="center" cssClass="middle-content">
-        <dxo-lookup [dataSource]="jobTitle" displayExpr="name" valueExpr="id">
-        </dxo-lookup>
+    <dxi-column caption="Job Title" dataField="jobTitleName" alignment="center" cssClass="middle-content">
+        <!-- <dxo-lookup [dataSource]="jobTitle" displayExpr="name" valueExpr="id">
+        </dxo-lookup> -->
     </dxi-column>
     <dxi-column caption="Action" cellTemplate="actionBtn" alignment="center" width="100">
         <div *dxTemplate="let t of 'actionBtn'" style="display: flex; gap: 10px;">
