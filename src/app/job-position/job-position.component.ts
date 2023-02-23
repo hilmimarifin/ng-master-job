@@ -34,7 +34,7 @@ export class JobPositionComponent implements OnInit {
     if (!name || !code || !titleId) { return; }
     this.jobPositionService.create({ name, code, titleId } as IJobPosition)
       .subscribe((newJobTitle) => {
-        this.dataSource.push(newJobTitle);
+        // this.dataSource.push(newJobTitle);
       });
   }
 

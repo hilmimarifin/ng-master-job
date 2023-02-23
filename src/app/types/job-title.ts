@@ -5,5 +5,6 @@ export interface IJobTitle {
 }
 
 export interface IJobPosition extends IJobTitle {
-    titleId: number
+    titleId: number,
+    titleName?: string
 }

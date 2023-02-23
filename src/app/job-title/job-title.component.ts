@@ -27,7 +27,7 @@ export class JobTitleComponent implements OnInit {
     if (!name || !code) { return; }
     this.jobtTitleService.create({ name, code } as IJobTitle)
       .subscribe((newJobTitle) => {
-        this.dataSource.push(newJobTitle);
+        // this.getList();
       });
   }
 

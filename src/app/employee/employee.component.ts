@@ -4,6 +4,7 @@ import EmployeeService from '../service/employee-service';
 import JobPositionService from '../service/job-position-service';
 import JobTitleService from '../service/job-title-service';
 import { IEmployee } from '../types/employee';
+import { IJobPosition } from '../types/job-title';
 
 @Component({
   selector: 'app-employee',
@@ -12,7 +13,9 @@ import { IEmployee } from '../types/employee';
 })
 export class EmployeeComponent implements OnInit {
 
-  constructor(private employeeService: EmployeeService, private jobPositionService: JobPositionService, private jobTitleService: JobTitleService) { }
+  constructor(private employeeService: EmployeeService, private jobPositionService: JobPositionService, private jobTitleService: JobTitleService) {
+    this.changevalue = this.changevalue.bind(this)
+   }
 
   ngOnInit(): void {
     this.getList()
@@ -20,8 +23,7 @@ export class EmployeeComponent implements OnInit {
     // this.getTitles()
   }
   dataSource : IEmployee[] = [];
-  jobTitle = [];
-  jobPosition = [];
+  jobPosition : IJobPosition[] = [];
 
   getList(): void {
     this.employeeService.getList()
@@ -66,6 +68,12 @@ export class EmployeeComponent implements OnInit {
     this.employeeService.delete(id).subscribe();
   }
 
+  changevalue (rowData: any, value: any) : void{
+    // (<any> this).defaultSetCellValue(rowData, value);
+    console.log('job position', this.jobPosition);
+    const jobPosition : any = this.jobPosition.find((jobPos: IJobPosition) => jobPos.id === value)
+    rowData.jobTitleName = jobPosition.titleName
+  }
 
   @ViewChild('gridContainer') gridContainer!: DxDataGridComponent;
 

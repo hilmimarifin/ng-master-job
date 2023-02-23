@@ -15,11 +15,11 @@
     <dxi-column caption="Nama" dataField="name" alignment="center" cssClass="middle-content" width="100"></dxi-column>
     <dxi-column caption="Employee NIK" dataField="nik" alignment="center" cssClass="middle-content"></dxi-column>
     <dxi-column caption="Alamat" dataField="address" alignment="center" cssClass="middle-content"></dxi-column>
-    <dxi-column caption="Job Position" dataField="jobPositionId" alignment="center" cssClass="middle-content">
+    <dxi-column caption="Job Position" dataField="jobPositionId" alignment="center" cssClass="middle-content"  [setCellValue]="changevalue">
         <dxo-lookup [dataSource]="jobPosition" displayExpr="name" valueExpr="id">
         </dxo-lookup>
     </dxi-column>
-    <dxi-column caption="Job Title" dataField="jobTitleName" alignment="center" cssClass="middle-content">
+    <dxi-column caption="Job Title" dataField="jobTitleName" alignment="center" cssClass="middle-content" >
         <!-- <dxo-lookup [dataSource]="jobTitle" displayExpr="name" valueExpr="id">
         </dxo-lookup> -->
     </dxi-column>
