@@ -20,12 +20,18 @@ export class JobPositionComponent implements OnInit {
 
   getList(): void {
     this.jobPositionService.getList()
-      .subscribe((listJob: any) => this.dataSource = listJob)
+      .subscribe(  {
+        next: (v) => this.dataSource = v,
+        error: (e) => alert("Fail to fetch data")
+      })
   }
 
   getTitles(): void {
     this.jobTitleService.getList()
-      .subscribe((listTitle: any) => this.jobTitle = listTitle)
+      .subscribe(  {
+        next: (v: any) => this.jobTitle = v,
+        error: (e) => alert("Fail to save")
+      })
   }
 
   create(name: string, code: string, titleId: number): void {
@@ -33,9 +39,12 @@ export class JobPositionComponent implements OnInit {
     code = code.trim();
     if (!name || !code || !titleId) { return; }
     this.jobPositionService.create({ name, code, titleId } as IJobPosition)
-      .subscribe((newJobTitle) => {
-        // this.dataSource.push(newJobTitle);
-      });
+      .subscribe(
+        {
+          next: (v) => this.gridContainer.instance.saveEditData(),
+          error: (e) => alert("Fail to save")
+        }
+      );
   }
 
   update(id: number, name: string, code: string, titleId: number): void {
@@ -43,16 +52,13 @@ export class JobPositionComponent implements OnInit {
     code = code.trim();
     if (!name || !code ||!titleId) { return; }
     this.jobPositionService.update({ id, name, code, titleId } as IJobPosition)
-      .subscribe();
+      .subscribe(
+        {
+          next: (v) => this.gridContainer.instance.saveEditData(),
+          error: (e) => alert("Fail to save")
+        }
+      );
   }
-
-  deletePosition(id: string): void {
-    // this.jobPositionService.delete(id).subscribe();
-    console.log("treiggered", id);
-    
-  }
-
-
 
   dataSource: IJobPosition[] = [];
   jobTitle = []
@@ -65,7 +71,6 @@ export class JobPositionComponent implements OnInit {
     } else {
       this.update(e.row.data.id, e.row.data.name, e.row.data.code, e.row.data.titleId)
     }
-    this.gridContainer.instance.saveEditData();
   }
 
   cancel(){
@@ -79,8 +84,14 @@ export class JobPositionComponent implements OnInit {
 
   delete(e: any){
     const indexRow = this.gridContainer.instance.getRowIndexByKey(e.id);
-    // this.deletePosition(e.id)
-    this.gridContainer.instance.deleteRow(indexRow);
+    if(confirm("are you sure want to delete?")){
+      this.jobPositionService.delete(e.id).subscribe(
+        {
+          next: (v) => this.gridContainer.instance.deleteRow(indexRow),
+          error: (e) => alert("Fail to delete")
+        }
+      );
+    }
   }
 
   addRow(){

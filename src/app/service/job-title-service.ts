@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, catchError, of } from "rxjs";
+import { Observable, catchError, of, throwError } from "rxjs";
 import { IJobTitle } from "../types/job-title";
 
 
@@ -17,44 +17,31 @@ export default class JobTitleService {
         })
     };
 
-    baseUrl= 'http://localhost:9000'
     ASPbaseUrl = 'http://localhost:5296'
 
     getList(): Observable<IJobTitle[]> {
         return this.http.get<IJobTitle[]>(`${this.ASPbaseUrl}/job-title`)
             .pipe(
-                catchError(this.handleError<IJobTitle[]>('getList', []))
+                catchError((error) => throwError(() => new Error(error)))
             )
     }
 
     create(jobTitle: IJobTitle): Observable<IJobTitle> {
         return this.http.post<IJobTitle>(`${this.ASPbaseUrl}/job-title/create`, jobTitle, this.httpOptions).pipe(
-            catchError(this.handleError<IJobTitle>('create'))
+            catchError((error) => throwError(() => new Error(error)))
         );
     }
 
     update(jobTitle: IJobTitle): Observable<IJobTitle> {
         return this.http.patch<IJobTitle>(`${this.ASPbaseUrl}/job-title/update`, jobTitle, this.httpOptions).pipe(
-          catchError(this.handleError<any>('update'))
+            catchError((error) => throwError(() => new Error(error)))
         );
       }
     
 
-    delete(id: string): Observable<IJobTitle> {
+    delete(id: string): Observable<any> {
         return this.http.delete<IJobTitle>(`${this.ASPbaseUrl}/job-title/delete`, {...this.httpOptions, body: {id: id}}).pipe(
-          catchError(this.handleError<IJobTitle>('delete'))
+            catchError((error) => throwError(() => new Error(error)))
         );
       }
-
-
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
-    }
 }

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, catchError, of } from "rxjs";
+import { Observable, catchError, of, throwError } from "rxjs";
 import { IEmployee } from "../types/employee";
 import { IJobPosition } from "../types/job-title";
 
@@ -18,44 +18,31 @@ export default class EmployeeService {
         })
     };
 
-    baseUrl= 'http://localhost:9000'
     ASPbaseUrl= 'http://localhost:5296'
 
     getList(): Observable<IEmployee[]> {
         return this.http.get<IEmployee[]>(`${this.ASPbaseUrl}/employee`)
             .pipe(
-                catchError(this.handleError<IEmployee[]>('getList', []))
+                catchError((error) => throwError(() => new Error(error)))
             )
     }
 
     create(employee: IEmployee): Observable<IEmployee> {
         return this.http.post<IEmployee>(`${this.ASPbaseUrl}/employee/create`, employee, this.httpOptions).pipe(
-            catchError(this.handleError<IEmployee>('create'))
+            catchError((error) => throwError(() => new Error(error)))
         );
     }
 
     update(employee: IEmployee): Observable<IEmployee> {
         return this.http.patch<IEmployee>(`${this.ASPbaseUrl}/employee/update`, employee, this.httpOptions).pipe(
-          catchError(this.handleError<any>('update'))
+            catchError((error) => throwError(() => new Error(error)))
         );
       }
     
 
-    delete(id: string): Observable<IEmployee> {
+    delete(id: string): Observable<any> {
         return this.http.delete<IEmployee>(`${this.ASPbaseUrl}/employee/delete`, {...this.httpOptions, body: {id: id}}).pipe(
-          catchError(this.handleError<IEmployee>('delete'))
+            catchError((error) => throwError(() => new Error(error)))
         );
       }
-
-
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
-    }
 }

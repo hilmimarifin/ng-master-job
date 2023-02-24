@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, catchError, of } from "rxjs";
+import { Observable, catchError, of, throwError } from "rxjs";
 import { IJobPosition } from "../types/job-title";
 
 
@@ -17,44 +17,33 @@ export default class JobPositionService {
         })
     };
 
-    baseUrl= 'http://localhost:9000'
-    ASPbaseUrl= 'http://localhost:5296'
+    baseUrl = 'http://localhost:9000'
+    ASPbaseUrl = 'http://localhost:5296'
 
     getList(): Observable<IJobPosition[]> {
         return this.http.get<IJobPosition[]>(`${this.ASPbaseUrl}/job-position`)
             .pipe(
-                catchError(this.handleError<IJobPosition[]>('getList', []))
+                catchError((error) => throwError(() => new Error(error)))
             )
     }
 
     create(jobTitle: IJobPosition): Observable<IJobPosition> {
         return this.http.post<IJobPosition>(`${this.ASPbaseUrl}/job-position/create`, jobTitle, this.httpOptions).pipe(
-            catchError(this.handleError<IJobPosition>('create'))
+            catchError((error) => throwError(() => new Error(error)))
         );
     }
 
     update(jobTitle: IJobPosition): Observable<IJobPosition> {
         return this.http.patch<IJobPosition>(`${this.ASPbaseUrl}/job-position/update`, jobTitle, this.httpOptions).pipe(
-          catchError(this.handleError<any>('update'))
+            catchError((error) => throwError(() => new Error(error)))
         );
-      }
-    
-
-    delete(id: string): Observable<IJobPosition> {
-        return this.http.delete<IJobPosition>(`${this.ASPbaseUrl}/job-position/delete`, {...this.httpOptions, body: {id: id}}).pipe(
-          catchError(this.handleError<IJobPosition>('delete'))
-        );
-      }
-
-
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-
-            // TODO: send the error to remote logging infrastructure
-            console.error(error); // log to console instead
-
-            // Let the app keep running by returning an empty result.
-            return of(result as T);
-        };
     }
+
+
+    delete(id: string): Observable<any> {
+        return this.http.delete<IJobPosition>(`${this.ASPbaseUrl}/job-position/delete`, { ...this.httpOptions, body: { id: id } }).pipe(
+            catchError((error) => throwError(() => new Error(error)))
+        );
+    }
+
 }

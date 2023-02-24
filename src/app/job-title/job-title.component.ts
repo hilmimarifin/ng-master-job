@@ -18,7 +18,12 @@ export class JobTitleComponent implements OnInit {
 
   getList(): void {
     this.jobtTitleService.getList()
-      .subscribe((listJob: any) => this.dataSource = listJob)
+      .subscribe(
+        {
+          next: (v) => this.dataSource = v,
+          error: (e) => alert("Fail to load data")
+        }
+      )
   }
 
   create(name: string, code: string): void {
@@ -26,9 +31,12 @@ export class JobTitleComponent implements OnInit {
     code = code.trim();
     if (!name || !code) { return; }
     this.jobtTitleService.create({ name, code } as IJobTitle)
-      .subscribe((newJobTitle) => {
-        // this.getList();
-      });
+      .subscribe(
+        {
+          next: (v) => this.gridContainer.instance.saveEditData(),
+          error: (e) => alert("Fail to save data")
+        }
+      );
   }
 
   update(id: number, name: string, code: string): void {
@@ -36,7 +44,12 @@ export class JobTitleComponent implements OnInit {
     code = code.trim();
     if (!name || !code) { return; }
     this.jobtTitleService.update({ id, name, code } as IJobTitle)
-      .subscribe();
+      .subscribe(
+        {
+          next: (v) => this.gridContainer.instance.saveEditData(),
+          error: (e) => alert("Fail to save data")
+        }
+      );
   }
 
 
@@ -53,7 +66,6 @@ export class JobTitleComponent implements OnInit {
     } else {
       this.update(e.row.data.id, e.row.data.name, e.row.data.code)
     }
-    this.gridContainer.instance.saveEditData();
   }
 
   cancel() {
@@ -67,8 +79,15 @@ export class JobTitleComponent implements OnInit {
 
   delete(e: any) {
     const indexRow = this.gridContainer.instance.getRowIndexByKey(e.id);
-    this.deleteTitle(e.id)
-    this.gridContainer.instance.deleteRow(indexRow);
+    if(confirm("are you sure want to delete?")){
+      this.jobtTitleService.delete(e.id).subscribe(
+        {
+          next: (v) => this.gridContainer.instance.deleteRow(indexRow),
+          error: (e) => alert("Fail to delete")
+        }
+      );
+      
+    }
   }
 
   addRow() {

@@ -20,20 +20,19 @@ export class EmployeeComponent implements OnInit {
   ngOnInit(): void {
     this.getList()
     this.getPositions()
-    // this.getTitles()
   }
   dataSource : IEmployee[] = [];
   jobPosition : IJobPosition[] = [];
 
   getList(): void {
     this.employeeService.getList()
-      .subscribe((listEmployee: any) => this.dataSource = listEmployee)
+      .subscribe(
+        {
+          next: (v) => this.dataSource = v,
+          error: (e) => alert("Error get data")
+        }
+      )
   }
-
-  // getTitles(): void {
-  //   this.jobTitleService.getList()
-  //     .subscribe((listTitle: any) => this.jobTitle = listTitle)
-  // }
 
   getPositions(): void {
     this.jobPositionService.getList()
@@ -49,9 +48,12 @@ export class EmployeeComponent implements OnInit {
     if (!name || !nik || !jobPositionId) { return; }
     
     this.employeeService.create({ name, nik, address, jobPositionId, jobTitleId} as IEmployee)
-      .subscribe((newEmployee) => {
-        this.dataSource.push(newEmployee);
-      });
+      .subscribe(
+        {
+          next: (v) => this.gridContainer.instance.saveEditData(),
+          error: (e) => alert("fail to save data")
+        }
+      );
   }
 
   update(id: string, name: string, nik: string, address: string, jobTitleId: string,  jobPositionId: string): void {
@@ -61,29 +63,30 @@ export class EmployeeComponent implements OnInit {
 
     if (!name || !nik || !jobPositionId || !jobTitleId) { return; }
     this.employeeService.update({ id, name, nik, jobPositionId, jobTitleId, address } as IEmployee)
-      .subscribe();
-  }
-
-  deleteEmployee(id: string): void {
-    this.employeeService.delete(id).subscribe();
+      .subscribe(
+        {
+          next: (v) => this.gridContainer.instance.saveEditData(),
+          error: (e) => alert("failt to save data")
+        }
+      );
   }
 
   changevalue (rowData: any, value: any) : void{
     // (<any> this).defaultSetCellValue(rowData, value);
     console.log('job position', this.jobPosition);
     const jobPosition : any = this.jobPosition.find((jobPos: IJobPosition) => jobPos.id === value)
+    rowData.jobPositionId = value
     rowData.jobTitleName = jobPosition.titleName
   }
 
   @ViewChild('gridContainer') gridContainer!: DxDataGridComponent;
 
-  save(e: any){
+  save(e: any){    
     if (!e.data.id) {
       this.create(e.row.data.name, e.row.data.nik, e.row.data.address, e.row.data.jobTitleId, e.row.data.jobPositionId)
     } else {
       this.update(e.row.data.id, e.row.data.name, e.row.data.nik, e.row.data.address, e.row.data.jobTitleId, e.row.data.jobPositionId)
     }
-    this.gridContainer.instance.saveEditData();
   }
 
   cancel(){
@@ -97,8 +100,14 @@ export class EmployeeComponent implements OnInit {
 
   delete(e: any){
     const indexRow = this.gridContainer.instance.getRowIndexByKey(e.id);
-    this.deleteEmployee(e.id)
-    this.gridContainer.instance.deleteRow(indexRow);
+    if(confirm("are you sure want to delete?")){
+      this.employeeService.delete(e.id).subscribe(
+        {
+          next: (v) => this.gridContainer.instance.deleteRow(indexRow),
+          error: (e) => alert("Fail to delete")
+        }
+      );
+    }
   }
 
   addRow(){

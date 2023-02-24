@@ -12,6 +12,7 @@
     keyExpr="id"
     edito
     [dataSource]="dataSource" [showBorders]="true">
+    <dxo-editing [confirmDelete]="false"></dxo-editing>
     <dxi-column caption="Code" dataField="code" alignment="center" cssClass="middle-content" width="100"></dxi-column>
     <dxi-column caption="Name" dataField="name" alignment="center" cssClass="middle-content"></dxi-column>
     <dxi-column caption="Action" cellTemplate="actionBtn" alignment="center" width="100">
